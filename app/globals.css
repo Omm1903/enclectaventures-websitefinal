@@ -50,6 +50,7 @@
   --hero-bg: #f6f5ff; /* near-white, faint cool tint — not pure white so glows still read */
   --hero-foreground: var(--brand-navy-900);
   --hero-foreground-muted: var(--base-500);
+    --hero-subtitle: var(--hero-foreground-muted);
 
   /* Tech accent palette (approved card colours) */
   --tech-cyan: #01c5ff;
@@ -71,6 +72,13 @@
      Development" and by the header logo for "Ventures", so the two always
      match. Overridden for dark below. */
   --hero-title-accent: #386cfc;
+
+  /* "Ventures" in the navbar logo — the same orange as the footer on every page (homepage + all other routes).
+     Change it here and the logo follows. Dark override is in the dark block below. */
+  --logo-accent: #f0781f;   /* same orange as the footer (--f-orange in footer.css) */
+
+  /* Logo typeface — "Raghero". Add the font file (see the @font-face note near .logo-font) and the
+     logo switches to it automatically; until then it falls back to the heading font. */
 
   /* ---------- Hero backdrop + floating 3D objects (LIGHT theme) ----------
      Read by hero-scene-light.ts. Cream base with three soft "waves":
@@ -163,15 +171,17 @@
   --hero-bg: #050b18;
   --hero-foreground: #f5f0ff;
   --hero-foreground-muted: #a7a2c4;
+    --hero-subtitle: #a7a2c4;
   --hero-accent: #bf00ff;
   --hero-accent-soft: #e9b8ff;
 
   /* read by hero-scene-dark.ts for the typed/title text and by the header
      logo for "Ventures" — same neon lime, so the two always match */
-  --hero-title-accent: #94fc2d;
+  --hero-title-accent:   #94fc2d;
+  --logo-accent:         #ff8a2b;   /* navbar "Ventures": same orange as the dark footer (--f-orange) */
   /* the neon-tube "hot core" of the title glyphs — near-white, with the
      lime above forming the halo around it (see hero-scene-dark.ts) */
-  --hero-title-core: #eefff0;
+  --hero-title-core: #FFFBEA;
 
   /* Simple vertical night-sky gradient behind the whole dark-theme scene —
      plain black up top, easing through deep navy into a soft blue-violet
@@ -246,6 +256,7 @@
   --color-hero-accent-soft: var(--hero-accent-soft);
   --color-hero-title-accent: var(--hero-title-accent);
   --color-hero-title-core: var(--hero-title-core);
+  --color-logo-accent: var(--logo-accent);
 
   --color-tech-cyan: var(--tech-cyan);
   --color-tech-purple: var(--tech-purple);
@@ -288,7 +299,22 @@
    GLOBAL TYPOGRAPHY CLASSES
    ========================================================= */
 
+/* Logo typeface. To switch it on, put the font file in /public/fonts/ and uncomment:
+
+   @font-face {
+     font-family: "Raghero";
+     src: url("/fonts/Raghero.woff2") format("woff2");   // match your real file name / format
+     font-weight: 400;
+     font-style: normal;
+     font-display: swap;
+   }
+*/
 @layer components {
+  .logo-font {
+    font-family: "Raghero", var(--type-heading), sans-serif;
+    font-weight: 400;          /* single-weight display font: never fake a bold */
+    font-synthesis: none;
+  }
   .heading-font {
     font-family: var(--type-heading);
   }
@@ -430,4 +456,458 @@
       transition-duration: 0.01ms !important;
     }
   }
+}
+
+/* =========================================================
+   PORTFOLIO SECTION — paste into app/globals.css
+   1) the LIGHT tokens go inside your existing  :root { ... }
+   2) the DARK tokens go inside your existing   :root[data-theme="dark"] { ... }
+   3) the classes at the bottom go anywhere after @layer components
+   ========================================================= */
+
+/* ---------- 1) LIGHT tokens (add inside :root) ---------- */
+:root {
+  /* soft pastel glows: lavender spotlight, mint left, peach right */
+  --portfolio-glow: rgba(196, 181, 253, 0.55);
+  --portfolio-glow-mint: rgba(179, 234, 208, 0.45);
+  --portfolio-glow-warm: rgba(255, 179, 138, 0.4);
+  --portfolio-floor: rgba(120, 100, 210, 0.32);
+
+  /* glass cards */
+  --portfolio-card-bg: rgba(255, 255, 255, 0.78);
+  --portfolio-card-border: rgba(140, 120, 220, 0.22);
+  --portfolio-card-shine: rgba(255, 255, 255, 0.95);
+  --portfolio-card-shadow: 0 34px 60px -24px rgba(110, 90, 200, 0.4);
+  --portfolio-card-glow: rgba(196, 181, 253, 0.7); /* centre card halo */
+  --portfolio-dim: #efe8fb; /* shading laid over the side cards */
+
+  --portfolio-accent: #ff9e6d; /* peach underline, arrow, active dot */
+}
+
+/* ---------- 2) DARK tokens (add inside :root[data-theme="dark"]) ---------- */
+:root[data-theme="dark"] {
+  --portfolio-glow: rgba(167, 139, 250, 0.32);
+  --portfolio-glow-mint: rgba(126, 231, 199, 0.1);
+  --portfolio-glow-warm: rgba(255, 158, 128, 0.14);
+  --portfolio-floor: rgba(167, 139, 250, 0.3);
+
+  --portfolio-card-bg: rgba(22, 24, 50, 0.78);
+  --portfolio-card-border: rgba(255, 255, 255, 0.14);
+  --portfolio-card-shine: rgba(255, 255, 255, 0.3);
+  --portfolio-card-shadow: 0 34px 70px -24px rgba(0, 0, 0, 0.85);
+  --portfolio-card-glow: rgba(167, 139, 250, 0.45);
+  --portfolio-dim: #05070f;
+
+  --portfolio-accent: #ff9e80;
+}
+
+/* ---------- 3) classes (replace the old .pf-* block with this) ---------- */
+@layer components {
+  /* --cw = base card width. Change it to make ALL cards bigger/smaller.
+     Stage height hugs the centre card, so there is no empty space above/below. */
+  .pf-stage {
+    --cw: clamp(13rem, 58vw, 18rem);
+    height: calc(var(--cw) * 1.14);
+    perspective: 1600px;
+    transform-style: preserve-3d;
+    touch-action: pan-y;
+  }
+  @media (min-width: 48rem) {
+    .pf-stage {
+      --cw: clamp(16rem, 30vw, 28rem);
+      height: calc(var(--cw) * 1.5);
+    }
+  }
+
+  /* Every card has the SAME real width (--cw x --big = the centre card's width).
+     Side cards are scaled down from it, so animating only moves/rotates/scales
+     (GPU-only, no layout) and the centre card's text stays sharp. */
+  .pf-card {
+    --w: calc(var(--cw) * var(--big));
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: var(--w);
+    aspect-ratio: 8 / 7;
+    container-type: inline-size;
+    border-radius: calc(var(--w) * 0.055);
+    border: 1px solid var(--portfolio-card-border);
+    background: var(--portfolio-card-bg);
+    box-shadow: var(--portfolio-card-shadow), inset 0 1px 0 var(--portfolio-card-shine);
+    transform: translate(-50%, -50%)
+      translate3d(calc(var(--cw) * var(--x)), 0, calc(var(--z) * 1px))
+      rotateY(calc(var(--r) * var(--k, 1) * 1deg))
+      scale(calc(var(--sc) * var(--h, 1)));
+    /* one long, gentle ease in-and-out: cards glide, they don't snap */
+    transition:
+      transform 1.15s cubic-bezier(0.65, 0, 0.2, 1),
+      box-shadow 1s ease;
+    backface-visibility: hidden;
+  }
+  /* the card that wraps round to the far side just fades in there */
+  .pf-card[data-wrap] {
+    transition: box-shadow 1s ease;
+    animation: pf-arrive 1.1s ease 0.2s backwards;
+  }
+  @keyframes pf-arrive {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  /* glass shine across the top-left corner */
+  .pf-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(135deg, var(--portfolio-card-shine), transparent 32%);
+    opacity: 0.35;
+    pointer-events: none;
+  }
+  /* soft halo round the centre card */
+  .pf-card[data-active] {
+    box-shadow: var(--portfolio-card-shadow), 0 0 70px -12px var(--portfolio-card-glow),
+      inset 0 1px 0 var(--portfolio-card-shine);
+  }
+  /* side cards turn a little towards you on hover */
+  .pf-card[data-side]:hover {
+    --k: 0.78;
+    --h: 1.03;
+  }
+  .pf-face {
+    position: relative;
+    height: 100%;
+  }
+}
+
+/* =========================================================
+   PRICING SECTION — paste into app/globals.css
+   1) LIGHT tokens  → inside your existing  :root { ... }
+   2) DARK tokens   → inside your existing  :root[data-theme="dark"] { ... }
+   3) classes       → anywhere after @layer components
+   ========================================================= */
+
+/* ---------- 1) LIGHT tokens ---------- */
+:root {
+  /* pastel glows behind the section */
+  --pricing-glow-a: rgba(196, 181, 253, 0.45);
+  --pricing-glow-b: rgba(179, 234, 208, 0.4);
+  --pricing-glow-c: rgba(255, 179, 138, 0.32);
+
+  /* glass cards */
+  --pricing-card-bg: rgba(255, 255, 255, 0.82);
+  --pricing-card-border: rgba(140, 120, 220, 0.18);
+  --pricing-card-shadow: 0 26px 50px -30px rgba(110, 90, 200, 0.4);
+
+  /* plan colours: solid + soft tint */
+  --pricing-mint: #4fcf9f;
+  --pricing-mint-soft: #d8f5e8;
+  --pricing-lavender: #8b7cf6;
+  --pricing-lavender-soft: #e7e3ff;
+  --pricing-peach: #ff9a68;
+  --pricing-peach-soft: #ffe5d6;
+  --pricing-on-accent: #1a1740; /* text sitting on a solid plan colour */
+
+  /* toggle */
+  --pricing-toggle-bg: rgba(140, 120, 220, 0.12);
+  --pricing-toggle-thumb: #ffffff;
+}
+
+/* ---------- 2) DARK tokens ---------- */
+:root[data-theme="dark"] {
+  --pricing-glow-a: rgba(167, 139, 250, 0.22);
+  --pricing-glow-b: rgba(126, 231, 199, 0.08);
+  --pricing-glow-c: rgba(255, 158, 128, 0.1);
+
+  --pricing-card-bg: rgba(22, 24, 50, 0.78);
+  --pricing-card-border: rgba(255, 255, 255, 0.12);
+  --pricing-card-shadow: 0 26px 60px -30px rgba(0, 0, 0, 0.85);
+
+  --pricing-mint: #7ee7c7;
+  --pricing-mint-soft: rgba(126, 231, 199, 0.15);
+  --pricing-lavender: #a78bfa;
+  --pricing-lavender-soft: rgba(167, 139, 250, 0.2);
+  --pricing-peach: #ff9e80;
+  --pricing-peach-soft: rgba(255, 158, 128, 0.17);
+  --pricing-on-accent: #14112e;
+
+  --pricing-toggle-bg: rgba(255, 255, 255, 0.08);
+  --pricing-toggle-thumb: #2c2f5c;
+}
+
+/* ---------- 3) classes ---------- */
+@layer components {
+  /* pay once / pay monthly switch */
+  .pr-toggle {
+    background: var(--pricing-toggle-bg);
+    border: 1px solid var(--pricing-card-border);
+  }
+  .pr-thumb {
+    background: var(--pricing-toggle-thumb);
+    box-shadow: 0 4px 14px -4px rgba(90, 70, 190, 0.35);
+    transition: transform 0.5s cubic-bezier(0.34, 1.4, 0.5, 1); /* tiny bounce */
+  }
+
+  /* plan card */
+  .pr-card {
+    position: relative;
+    border-radius: 1.75rem;
+    background: var(--pricing-card-bg);
+    border: 1px solid var(--pricing-card-border);
+    box-shadow: var(--pricing-card-shadow);
+    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.5s ease, border-color 0.4s ease, background-color 0.4s ease;
+  }
+  .pr-card:hover {
+    transform: translateY(-6px);
+    border-color: var(--pr-accent);
+    box-shadow: var(--pricing-card-shadow), 0 0 0 1px var(--pr-accent), 0 0 46px -12px var(--pr-accent);
+    background-color: color-mix(in srgb, var(--pr-soft) 60%, var(--pricing-card-bg));
+  }
+  /* light that follows the pointer */
+  .pr-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(22rem circle at var(--mx, 50%) var(--my, 0%), var(--pr-soft), transparent 65%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+  }
+  .pr-card:hover::before {
+    opacity: 1;
+  }
+  .pr-card > * {
+    position: relative;
+  }
+  /* the plan you picked sits a little higher */
+  @media (min-width: 48rem) {
+    .pr-card[data-selected] {
+      transform: translateY(-0.9rem);
+    }
+    .pr-card[data-selected]:hover {
+      transform: translateY(-1.5rem);
+    }
+  }
+  /* the plan you picked gets a soft coloured ring + glow + tint */
+  .pr-card[data-selected] {
+    border-color: var(--pr-accent);
+    box-shadow: var(--pricing-card-shadow), 0 0 0 1px var(--pr-accent), 0 0 46px -12px var(--pr-accent);
+    background-color: color-mix(in srgb, var(--pr-soft) 40%, var(--pricing-card-bg));
+  }
+
+  /* while the pointer is on another card, the picked card drops its ring, glow and tint
+     (the hovered card shows them instead); they come back when the pointer leaves the plans */
+  .pr-grid:has(.pr-card:hover) .pr-card[data-selected]:not(:hover) {
+    border-color: var(--pricing-card-border);
+    box-shadow: var(--pricing-card-shadow);
+    background-color: var(--pricing-card-bg);
+  }
+
+  /* "Choose plan" button: outline → filled when selected */
+  .pr-pick {
+    border: 1.5px solid var(--pr-accent);
+    color: var(--foreground);
+    background: transparent;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+  }
+  .pr-pick:hover {
+    background: var(--pr-soft);
+  }
+  .pr-pick:active {
+    transform: scale(0.98);
+  }
+  .pr-card[data-selected] .pr-pick {
+    background: var(--pr-accent);
+    color: var(--pricing-on-accent);
+  }
+
+  /* add-on chips */
+  .pr-chip {
+    border: 1.5px solid var(--pricing-card-border);
+    background: var(--pricing-card-bg);
+    color: var(--foreground);
+    transition: transform 0.25s cubic-bezier(0.34, 1.4, 0.5, 1), background-color 0.3s ease, border-color 0.3s ease;
+  }
+  .pr-chip:hover {
+    transform: translateY(-2px);
+    border-color: var(--pricing-lavender);
+  }
+  .pr-chip:active {
+    transform: scale(0.96);
+  }
+  .pr-chip-icon {
+    background: var(--pricing-lavender-soft);
+    color: var(--pricing-lavender);
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  .pr-chip[data-on] {
+    border-color: var(--pricing-lavender);
+    background: var(--pricing-lavender-soft);
+  }
+  .pr-chip[data-on] .pr-chip-icon {
+    background: var(--pricing-lavender);
+    color: var(--pricing-on-accent);
+  }
+
+  /* estimate bar */
+  .pr-summary {
+    border-radius: 2rem;
+    background: var(--pricing-card-bg);
+    border: 1px solid var(--pricing-card-border);
+    box-shadow: var(--pricing-card-shadow);
+  }
+}
+
+/* =========================================================
+   CTA SECTION — paste into app/globals.css
+   1) LIGHT tokens → inside your existing  :root { ... }
+   2) DARK tokens  → inside your existing  :root[data-theme="dark"] { ... }
+   3) classes      → anywhere after @layer components
+   ========================================================= */
+
+/* ---------- 1) LIGHT tokens ---------- */
+:root {
+
+  /* cycling word gradient */
+  --cta-word-a: #7c6cf0;
+  --cta-word-b: #ff8f5c;
+
+  /* floating shapes */
+  --cta-cube-a: #d6fba4;
+  --cta-cube-b: #98d060;
+  --cta-orb-a: #ffd9c4;
+  --cta-orb-b: #fd8f6c;
+  --cta-plane: #8699fd;
+}
+
+/* ---------- 2) DARK tokens ---------- */
+:root[data-theme="dark"] {
+
+  --cta-word-a: #b7a6ff;
+  --cta-word-b: #ffb08a;
+
+  --cta-cube-a: #b8f27a;
+  --cta-cube-b: #6fc23a;
+  --cta-orb-a: #ffb99a;
+  --cta-orb-b: #ff7d5c;
+  --cta-plane: #a9b6ff;
+}
+
+/* ---------- 3) classes ---------- */
+@layer components {
+  /* ---------- cycling word ---------- */
+  .cta-word {
+    /* room for descenders (the "g" in "design"), since the box clips */
+    padding-bottom: 0.14em;
+    margin-bottom: -0.14em;
+  }
+  .cta-word-item {
+    background: linear-gradient(100deg, var(--cta-word-a), var(--cta-word-b));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    transition: transform 0.75s cubic-bezier(0.65, 0, 0.2, 1), opacity 0.6s ease;
+  }
+  .cta-word-item[data-state="now"] {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  .cta-word-item[data-state="out"] {
+    transform: translateY(-110%);
+    opacity: 0;
+  }
+  .cta-word-item[data-state="next"] {
+    transform: translateY(110%);
+    opacity: 0;
+  }
+
+  /* ---------- floating shapes ---------- */
+  .cta-shape {
+    position: absolute;
+    animation: cta-float 7s ease-in-out infinite;
+    opacity: 0.95;
+  }
+  .cta-cube {
+    border-radius: 28%;
+    background: linear-gradient(140deg, var(--cta-cube-a), var(--cta-cube-b));
+    box-shadow: inset -6px -8px 14px rgba(0, 0, 0, 0.1), 0 14px 26px -10px rgba(120, 190, 70, 0.55);
+  }
+  .cta-orb {
+    border-radius: 999px;
+    background: radial-gradient(circle at 30% 28%, var(--cta-orb-a), var(--cta-orb-b));
+    box-shadow: 0 14px 26px -10px rgba(253, 143, 108, 0.55);
+  }
+  .cta-plane {
+    color: var(--cta-plane);
+    filter: drop-shadow(0 12px 14px rgba(105, 125, 255, 0.35));
+  }
+  @keyframes cta-float {
+    0%,
+    100% {
+      transform: translateY(0) rotate(-4deg);
+    }
+    50% {
+      transform: translateY(-14px) rotate(6deg);
+    }
+  }
+}
+
+/* =========================================================
+   SECTION BLEND — every homepage section fades in and out at
+   its top and bottom edges, so neighbouring sections melt into
+   each other through the page background (--background).
+   Works in both themes because it uses transparency, not colours.
+   ========================================================= */
+body:has(#hero) main > section:not(#hero) {
+  --blend: clamp(3rem, 8vw, 7rem); /* default fade height */
+  --blend-top: var(--blend);       /* fade at the top edge */
+  --blend-bottom: var(--blend);    /* fade at the bottom edge */
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0,
+    #000 var(--blend-top),
+    #000 calc(100% - var(--blend-bottom)),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0,
+    #000 var(--blend-top),
+    #000 calc(100% - var(--blend-bottom)),
+    transparent 100%
+  );
+}
+
+/* ---- pair rules (cross-dissolve: the lower section slides up and fades in over the upper one) ---- */
+
+/* section above -> How we work */
+html body:has(#hero) main > section:has(+ #process) { --blend-bottom: 0px; }
+html body:has(#hero) main > section#process {
+  --blend-top: clamp(1.5rem, 3vw, 3rem);
+  --blend-bottom: 0px;
+  margin-top: calc(var(--blend) * -1);
+  position: relative;
+  z-index: 1;
+}
+
+/* How we work -> Portfolio -> section below */
+html body:has(#hero) main > section#portfolio {
+  --blend-bottom: 0px;                   /* keep the blue solid down to the bottom edge */
+  margin-top: calc(var(--blend) * -1);   /* slide up over "How we work" */
+  position: relative;
+  z-index: 1;
+}
+html body:has(#hero) main > section#portfolio + section {
+  margin-top: calc(var(--blend) * -1);   /* section below slides up over the portfolio */
+  position: relative;
+  z-index: 1;
+}
+body:has(#hero) footer {
+  --blend: clamp(3rem, 8vw, 7rem);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 var(--blend));
+  mask-image: linear-gradient(to bottom, transparent 0, #000 var(--blend));
 }

@@ -600,16 +600,10 @@ export function createHeroScene({
     const w1 = c.measureText("Enclecta ").width;
     const w2 = c.measureText("Ventures").width;
     const x = (1024 - (w1 + w2)) / 2;
-    c.shadowColor = hexToRgba(P.titleAccent, 0.95);
-    c.shadowBlur = 30;
-    c.fillStyle = P.titleAccent;
-    c.fillText("Enclecta ", x, 128);
-    c.fillText("Ventures", x + w1, 128);
-    c.shadowBlur = 8;
-    c.fillStyle = P.titleCore;
-    c.fillText("Enclecta ", x, 128);
-    c.fillText("Ventures", x + w1, 128);
+    // plain white, no glow — same as the page title
     c.shadowBlur = 0;
+    c.shadowColor = "transparent";
+    c.fillStyle = "#ffffff";
     c.fillText("Enclecta ", x, 128);
     c.fillText("Ventures", x + w1, 128);
 
@@ -685,24 +679,10 @@ export function createHeroScene({
     c.textAlign = "left";
     c.textBaseline = "alphabetic";
 
-    // 1) wide, soft green halo — the "glow spilling into the room" layer
-    c.fillStyle = P.titleAccent;
-    c.shadowColor = hexToRgba(P.titleAccent, 0.95);
-    c.shadowBlur = 34 * QT;
-    c.fillText(L.full, L.padL, L.above);
-    c.fillText(L.full, L.padL, L.above);
-
-    // 2) tighter green glow, hugging the letterforms
-    c.shadowBlur = 14 * QT;
-    c.fillText(L.full, L.padL, L.above);
-
-    // 3) near-white hot core — reads as a lit neon tube rather than a flat
-    // green shape; the green from (1)/(2) still rims the edges as a halo
-    c.shadowBlur = 6 * QT;
-    c.shadowColor = hexToRgba(P.titleAccent, 0.8);
-    c.fillStyle = P.titleCore;
-    c.fillText(L.full, L.padL, L.above);
+    // plain white title, no glow
     c.shadowBlur = 0;
+    c.shadowColor = "transparent";
+    c.fillStyle = "#ffffff";
     c.fillText(L.full, L.padL, L.above);
 
     c.setTransform(1, 0, 0, 1, 0, 0);

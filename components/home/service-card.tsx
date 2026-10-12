@@ -28,7 +28,7 @@ export default function ServiceCard({
     <Link
       href={href}
       className={cn(
-        "group relative flex h-full flex-col gap-5 rounded-[var(--radius-lg)] border border-[color:var(--border)] bg-surface p-6 sm:p-7",
+        "svc-card group relative flex h-full flex-col gap-5 rounded-[var(--radius-lg)] border border-[color:var(--border)] bg-surface p-6 sm:p-7",
         "transition-all duration-300 ease-out hover:-translate-y-1 hover:border-brand-orange/40",
         "hover:shadow-[0_18px_40px_-22px_rgba(0,0,0,0.4)]",
         "focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-orange",
@@ -41,7 +41,7 @@ export default function ServiceCard({
         </span>
         <span
           className={cn(
-            "flex h-11 w-11 items-center justify-center rounded-[var(--radius-md)]",
+            "svc-icon flex h-11 w-11 items-center justify-center rounded-[var(--radius-md)]",
             "bg-brand-orange/10 text-brand-orange transition-colors duration-300",
             "group-hover:bg-brand-orange group-hover:text-brand-white",
           )}
@@ -65,7 +65,7 @@ export default function ServiceCard({
         {tags.map((tag) => (
           <span
             key={tag}
-            className="body-font rounded-[var(--radius-sm)] bg-foreground/5 px-2.5 py-1 text-[0.75rem] text-foreground-muted"
+            className="svc-tag body-font rounded-[var(--radius-sm)] bg-foreground/5 px-2.5 py-1 text-[0.75rem] text-foreground-muted"
           >
             {tag}
           </span>

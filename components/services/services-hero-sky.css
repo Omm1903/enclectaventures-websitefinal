@@ -1,0 +1,23 @@
+.sky{
+ --sky-cloud-hi:#ffffff;--sky-cloud-lo:#e3d8ff;--sky-cloud2-hi:#f1e6ff;--sky-cloud2-lo:#c9bcf6;--sky-spark:#ffe27a;
+ position:absolute;inset:0;z-index:-1;overflow:hidden;pointer-events:none;background:#bcd0ff;
+}
+[data-theme="dark"] .sky{--sky-cloud-hi:#8a7af2;--sky-cloud-lo:#3d32b0;--sky-cloud2-hi:#5f4fd8;--sky-cloud2-lo:#251c88;--sky-spark:#fff;background:#080a3c}
+.sky-layer,.sky-fill{position:absolute;inset:0;width:100%;height:100%}.sky-layer{display:block;overflow:hidden}.sky-day,.sky-night{transition:opacity .6s ease}.sky-night{opacity:0}[data-theme="dark"] .sky .sky-day{opacity:0}[data-theme="dark"] .sky .sky-night{opacity:1}
+.sky-day.sky-fill{background:radial-gradient(36% 38% at 4% 4%,rgba(210,190,255,.9),transparent 72%),radial-gradient(40% 36% at 62% 8%,rgba(150,215,255,.55),transparent 72%),linear-gradient(0deg,rgba(255,205,228,.75),transparent 42%),linear-gradient(105deg,#ffd9bd 0%,#ffcee0 22%,#dccdff 46%,#bdd2ff 68%,#96cfff 100%)}
+.sky-night.sky-fill{background:radial-gradient(55% 50% at 80% 50%,rgba(125,70,225,.38),transparent 72%),linear-gradient(180deg,#070938 0%,#11125f 50%,#231d8e 100%)}
+.sky-foot.sky-fill{top:auto;height:12%;background:linear-gradient(0deg,var(--sky-cloud-lo),transparent);opacity:.45}
+.sky-spk{position:absolute;left:var(--x);top:var(--y);translate:-50% -50%;overflow:visible;transform-origin:center;animation:sky-spark 4.5s ease-in-out infinite}.sky .sky-spk path{fill:var(--sky-spark)}
+.sky-star{animation:sky-star-tw var(--t,5s) ease-in-out var(--d,0s) infinite}.sky-dot{animation:sky-dot 5s ease-in-out infinite}.sky-shooter{opacity:0;animation:sky-shoot 7s ease-in-out infinite}
+.sky-clouds{top:0;animation:sky-cloud-drift 42s ease-in-out infinite alternate}.sky-cloud-front{animation-duration:52s;animation-direction:alternate-reverse}
+@keyframes sky-cloud-drift{from{transform:translate3d(-8px,4px,0)}to{transform:translate3d(10px,-2px,0)}}
+@keyframes sky-star-tw{0%,100%{opacity:calc(var(--o,1)*.35)}50%{opacity:var(--o,1)}}@keyframes sky-spark{0%,100%{transform:scale(.8);opacity:.6}50%{transform:scale(1.05);opacity:1}}@keyframes sky-dot{0%,100%{opacity:.35}50%{opacity:.9}}
+@keyframes sky-shoot{0%,62%{opacity:0;transform:translate(40px,-24px)}72%{opacity:1}92%,100%{opacity:0;transform:translate(-30px,18px)}}
+@media(max-width:767px){.sky-spk{left:var(--mx,var(--x));top:var(--my,var(--y))}.sky-spk.sm-off{display:none}.sky-clouds{top:0}}
+@media(prefers-reduced-motion:reduce){.sky *, .sky{animation:none!important}.sky-shooter{opacity:.8}}
+
+
+/* the drift moves the cloud shapes inside a fixed full-size layer, so no empty strip can open at either edge */
+.sky .sky-clouds{animation:none}
+.sky-drift{animation:sky-cloud-drift 42s ease-in-out infinite alternate}
+.sky-cloud-front .sky-drift{animation-duration:52s;animation-direction:alternate-reverse}
