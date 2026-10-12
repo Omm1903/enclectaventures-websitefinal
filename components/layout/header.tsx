@@ -93,18 +93,16 @@ export default function Header({
       "after:absolute after:-bottom-0.5 after:left-0 after:h-[1.5px] after:w-full",
       "after:origin-left after:scale-x-0 after:transition-transform after:duration-200 after:content-['']",
       overlay
-        ? [
+        ? `${
             active
               ? "text-hero-foreground after:scale-x-100"
-              : "text-hero-foreground-muted hover:text-hero-foreground hover:after:scale-x-100",
-            "after:bg-hero-foreground",
-          ]
-        : [
+              : "text-hero-foreground-muted hover:text-hero-foreground hover:after:scale-x-100"
+          } after:bg-hero-foreground`
+        : `${
             active
               ? "text-foreground after:scale-x-100"
-              : "text-foreground-muted hover:text-foreground hover:after:scale-x-100",
-            "after:bg-brand-orange",
-          ],
+              : "text-foreground-muted hover:text-foreground hover:after:scale-x-100"
+          } after:bg-brand-orange`,
     );
 
   return (
@@ -121,10 +119,7 @@ export default function Header({
           ? scrolled
             ? "border-hero-foreground/10 bg-hero-bg/65 backdrop-blur-xl backdrop-saturate-150 shadow-[0_10px_30px_-20px_rgba(0,0,0,0.5)]"
             : "border-transparent bg-transparent"
-          : [
-              "border-[color:var(--border)] bg-background/65 backdrop-blur-xl backdrop-saturate-150",
-              scrolled && "shadow-[0_10px_30px_-20px_rgba(0,0,0,0.35)]",
-            ],
+          : `border-[color:var(--border)] bg-background/65 backdrop-blur-xl backdrop-saturate-150${scrolled ? " shadow-[0_10px_30px_-20px_rgba(0,0,0,0.35)]" : ""}`,
         hideNav && "-translate-y-full",
         overlay && !revealed && "pointer-events-none opacity-0",
       )}

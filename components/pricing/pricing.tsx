@@ -6,7 +6,7 @@ import Button from "@/components/ui/button";
 import Reveal from "@/components/ui/reveal";
 import { Heading, Subtitle } from "@/components/ui/typography";
 import { cn } from "@/lib/utils";
-import { ADDONS, CURRENCY, LOCALE, MODE_COPY, PLANS, type Mode, type Plan } from "./pricing-data";
+import { ADDONS, CURRENCY, LOCALE, MODE_COPY, PLANS, type Mode, type Plan } from "@/components/home/pricing-data";
 
 /* ---------- helpers ---------- */
 

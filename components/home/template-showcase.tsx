@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Section from "@/components/layout/section";
 import Button from "@/components/ui/button";
 import Reveal from "@/components/ui/reveal";
@@ -22,7 +22,6 @@ function Icon({ d, className }: { d: string; className?: string }) {
 const CHEVRON_L = "M15 5l-7 7 7 7";
 const CHEVRON_R = "M9 5l7 7-7 7";
 const CLOSE = "M6 6l12 12M18 6L6 18";
-const EXPAND = "M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5";
 
 const arrowBtn =
   "absolute top-1/2 z-[2] grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full border border-[color:var(--border)] bg-surface/75 text-foreground shadow-sm backdrop-blur-md transition-colors hover:border-brand-orange hover:text-brand-orange disabled:opacity-40 sm:h-12 sm:w-12";
@@ -131,16 +130,6 @@ export default function TemplateShowcase() {
     };
   }, [failed]);
 
-  const showTemplate = useCallback((i: number) => {
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    stageRef.current?.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "center" });
-    if (handleRef.current) handleRef.current.open(i);
-    else {
-      pendingRef.current = i; // scene not built yet — open as soon as it is
-      startRef.current();
-    }
-  }, []);
-
   const current = TEMPLATES[active] ?? TEMPLATES[0];
 
   const hint = zoomed
@@ -183,7 +172,7 @@ export default function TemplateShowcase() {
       ) : (
         <>
           {/* ---------- 3D ring ---------- */}
-          <Reveal delay={100} variant="fade">
+          <Reveal delay={100}>
             <div
               ref={stageRef}
               tabIndex={0}

@@ -5,7 +5,6 @@ import SiteHeader from "@/components/layout/site-header";
 import Footer from "@/components/layout/footer";
 import { ThemeProvider, themeInitScript } from "@/components/theme/theme-provider";
 import { siteConfig } from "@/lib/site";
-import SmoothScroll from "@/components/layout/smooth-scroll";
 
 /* =========================================================
    FONT GENERALISATION

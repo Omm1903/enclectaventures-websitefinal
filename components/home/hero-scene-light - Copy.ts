@@ -130,7 +130,6 @@ export function createHeroScene({
   hero,
   canvas,
   lineEls,
-  lines: _lines, // ignored — the headline now comes from HERO_HEADLINE above
   onTitleLanded,
   skipIntro = false,
 }: HeroSceneParams): HeroSceneHandle {
